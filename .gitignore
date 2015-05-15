@@ -2,7 +2,7 @@
 *.class
 
 .project
-
+.review
 src/jena/ConstructTest.java
 
 src/jena/HelloRDFWorld.java
@@ -16,3 +16,5 @@ src/jena/Remote.java
 src/jena/ReadTDB.java
 
 src/jena/ReadNT.java
+
+data/amazonData/positive.review
