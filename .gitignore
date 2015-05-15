@@ -2,7 +2,9 @@
 *.class
 
 .project
+
 .review
+
 src/jena/ConstructTest.java
 
 src/jena/HelloRDFWorld.java
@@ -18,3 +20,13 @@ src/jena/ReadTDB.java
 src/jena/ReadNT.java
 
 data/amazonData/positive.review
+
+data/amazonData/negative.review
+
+data/amazonData/all.review
+
+data/amazonData/processed.review
+
+data/amazonData/processed.review.balanced
+
+data/amazonData/unlabeled.review
