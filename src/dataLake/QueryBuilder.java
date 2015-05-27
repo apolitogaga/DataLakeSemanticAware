@@ -40,6 +40,19 @@ public class QueryBuilder {
 			
 	}
 
-
+public static Query getGenre(String mov){
+		
+		String qstring = "PREFIX linkedmdb: <http:/data.linkedmdb.org/resource/movie/> "
+				+ "SELECT ?genre ?genre_name ?genre_id "
+				+ "WHERE {"+mov+" linkedmdb:genre ?genre."
+				+ "?genre linkedmdb:film_genre_name ?genre_name."
+				+"?genre linkedmdb:film_genre_film_genreid ?genre_id.}";
+								
+		return QueryFactory.create(qstring);
+			
+	}
+	
+	
+	
 	
 }
