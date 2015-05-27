@@ -14,6 +14,7 @@ import com.hp.hpl.jena.tdb.TDBFactory;
 
 public class TBDManager {
 	private Dataset datalake;
+	
 	private String directory="DataLake";
 	private Model tbd;
 	public TBDManager(){
@@ -33,12 +34,13 @@ public class TBDManager {
 			System.out.println (e.toString());
 		}
 	}
-	public void store(Query qResult){
+	public Model store(Query qResult){
 		datalake.begin(ReadWrite.WRITE);
 		Model model = datalake.getDefaultModel();		
 		execConstQuery(qResult);
-		//model.add(qResult); // would be the best way to use this query but there's an error while executing it.
+		//model.add(qResult, service); // would be the best way to use this query but there's an error while executing it.
 		datalake.commit();
+		return model;
 	}
 	private void execConstQuery(Query cQuery){
 		//would much rather get rid of this sentence but I couldn't find another way around it
@@ -59,10 +61,7 @@ public class TBDManager {
 			System.out.println( subjects.get(i).toString() );
 			System.out.println(subjects.get(i).getURI());
 			
-		}	
-		miguelmossa mi usuario gibhub
-		github
-		
+		}
 		datalake.end();
 	}
 	

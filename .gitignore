@@ -30,3 +30,13 @@ data/amazonData/processed.review
 data/amazonData/processed.review.balanced
 
 data/amazonData/unlabeled.review
+
+*.dat
+
+*.idn
+
+*.jrnl
+
+*.dat-jrnl
+
+*.lock
