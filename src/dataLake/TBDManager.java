@@ -1,6 +1,5 @@
 package dataLake;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.hp.hpl.jena.query.Dataset;
@@ -47,7 +46,9 @@ public class TBDManager {
 		QueryExecution qexec = QueryExecutionFactory.create(cQuery, tbd);
 		Model results = qexec.execConstruct(tbd);
 	}
-	
+	    //---- posible execSelectQuery--------
+        //String endPointAddress ="data.linkedmdb.org/sparql" ;
+		//ResultSet myQueryExec = QueryExecutionFactory.sparqlService(endPointAddress, myQuery).execSelect() ;		
 	
 	public void read(){
 		datalake.begin(ReadWrite.READ);
