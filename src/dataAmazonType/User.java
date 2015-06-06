@@ -7,25 +7,31 @@ public class User {
 
 	private int id;
 	private ArrayList<Rating> ratings;
+
 	public User(String username, int id) {
 		super();
 		this.username = username;
 		this.id = id;
 		ratings = new ArrayList<Rating>();
 	}
-	public User(String username, int id, Rating rating){
-		this(username,id);
+
+	public User(String username, int id, Rating rating) {
+		this(username, id);
 		ratings.add(rating);
 	}
-	public void addRating(Rating rating ){
+
+	public void addRating(Rating rating) {
 		ratings.add(rating);
 	}
-	public String toString(){
-		String ratingStrings="";
-		for(Rating rating : ratings)
-			ratingStrings+= "<>"+rating.getMovieRating();
-		return Integer.toString(id)+ "::"+ username+"::"+ratingStrings;
+
+	@Override
+	public String toString() {
+		String ratingStrings = "";
+		for (Rating rating : ratings)
+			ratingStrings += "<>" + rating.getMovieRating();
+		return Integer.toString(id) + "::" + username + "::" + ratingStrings;
 	}
+
 	public String getUsername() {
 		return username;
 	}

@@ -3,6 +3,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/JenaLibs"/>
-	<classpathentry kind="lib" path="/Users/hectorapolorosalespulido/Documents/workspace/Jensssa/apacheJar/commons-math3-3.5.jar"/>
+	<classpathentry kind="lib" path="/Users/hectorapolorosalespulido/Documents/workspace/Jena/apacheJar/commons-math3-3.5.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/Users/hectorapolorosalespulido/Documents/workspace/Jena/apacheJar/commons-math3-3.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -38,3 +38,4 @@ data/amazonData/unlabeled.review
 *.dat-jrnl
 
 *.lock
+/bin/
