@@ -21,7 +21,7 @@ public class SPARQLManager {
 	public ArrayList<String> movies;
 	public Model overallModel;
 	public static final String PATH="data/linkedMDB/"; 
-	private static final boolean TEST_ENV = false;
+	private static final boolean TEST_ENV = true;
 	
 	public final String ACTOR;
 	public final String DIRECTOR;
@@ -75,6 +75,7 @@ public class SPARQLManager {
 				+ QueryBuilder.buildLimit();
 		Model movs =execQuery(query);
 		List<Statement> subjects = movs.listStatements().toList();
+		for(Statement stat:subjects){System.out.println(stat.toString());}
 		System.out.println("getMov <> "+subjects.size());
 	}
 	public void getMovName(){
@@ -97,7 +98,7 @@ public class SPARQLManager {
 				+ QueryBuilder.buildLimit();
 		Model movs =execQuery(query);
 		List<Statement> subjects = movs.listStatements().toList();
-
+		for(Statement stat:subjects){System.out.println(stat.toString());}
 		System.out.println("geActorMov <> "+subjects.size());
 	}
 	public void getActorName(){

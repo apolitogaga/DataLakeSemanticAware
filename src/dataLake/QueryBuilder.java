@@ -23,7 +23,7 @@ public final class QueryBuilder {
 	public static final String DC = " PREFIX "+DCTITLE+": <http://purl.org/dc/terms/>";
 	public static final String PREFIXES =  DBPEDIA + MOVIE+ DC;
 	public static final String FILM_LIMIT= "666";
-	public static final boolean EXTERNAL_QUERY=true;
+	public static final boolean EXTERNAL_QUERY=false;
 	public static final String SERVICE = EXTERNAL_QUERY ? "{service <http://linkedmdb.org/sparql>" : "" ;
 	public static final String CLOSE_SERVICE = EXTERNAL_QUERY ? "}" : "" ;
 

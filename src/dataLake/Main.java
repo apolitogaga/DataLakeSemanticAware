@@ -15,9 +15,9 @@ public class Main {
 		// TODO Auto-generated method stub
 		SPARQLManager test = new SPARQLManager();
 		//test.datalake.queryTBD();
-//		test.getMov();
-//		test.getMovName();
-//		test.getActorMov();
+		test.getMov();
+		//test.getMovName();
+		//test.getActorMov();
 //		test.getActorName();
 //		test.getActorClass();
 //		test.getDirectorMov();
@@ -41,7 +41,7 @@ public class Main {
 		//test.getActors();
 //		test.getActorClass();
 		//test.getDirectors();
-		test.wturtleF("tbdStatus2", test.datalake.getModel());
+		//test.wturtleF("tbdStatus2", test.datalake.getModel());
 		
 		
 	}

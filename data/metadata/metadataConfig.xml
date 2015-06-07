@@ -1,0 +1,19 @@
+<sources><source name="linkedmdb" type="rdf">
+	<sparql service="http://linkedmdb.org/sparql"></sparql>
+	<entity name="movie" uri="film">
+		<entity_name name="title"></entity_name></entity>
+	<entity name="actor" uri="actor">
+		<entity_name name="actor_name"></entity_name></entity>
+	<entity name="director" uri="director">
+		<entity_name>director_name</entity_name></entity>
+		</source>
+	<source name="review" type="xml">
+		<entity name="movie">
+			<entity_name>product_name</entity_name></entity>
+		<entity name="user">
+			<entity_name>reviewer</entity_name></entity>
+		<entity name="rating">
+			<entity_name>rating</entity_name>
+		</entity>
+	</source>
+</sources>
