@@ -39,3 +39,5 @@ data/amazonData/unlabeled.review
 
 *.lock
 /bin/
+
+*.zip

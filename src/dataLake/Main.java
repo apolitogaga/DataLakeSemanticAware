@@ -22,6 +22,7 @@ public class Main {
 	public static void dataLakeTest() {
 		// TODO Auto-generated method stub
 		SPARQLManager test = new SPARQLManager();
+		test.initialize();
 		test.selectMovieBestRated();
 //		test.wturtleF("tbdStatus2", test.datalake.getModel());
 //		for(int i=0; i<10;i++) 	test.getMov(i*2500);
