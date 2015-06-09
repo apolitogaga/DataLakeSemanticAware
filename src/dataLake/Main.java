@@ -10,7 +10,11 @@ public class Main {
 		Integrator integrator =  new Integrator();
 //		integrator.integrate();
 		
-		dataLakeTest();
+//		dataLakeTest();
+		
+		Recommendator rec = new Recommendator();
+		rec.waitForEnter();
+		
 		System.out.println("\n\n\n\t\t\t <<<<<<<<FFFFIIINNNNIIISSSSHHHHEEEDD>>>>>>>>> ");
 		
 	}
@@ -18,7 +22,8 @@ public class Main {
 	public static void dataLakeTest() {
 		// TODO Auto-generated method stub
 		SPARQLManager test = new SPARQLManager();
-		test.wturtleF("tbdStatus2", test.datalake.getModel());
+		test.selectMovieBestRated();
+//		test.wturtleF("tbdStatus2", test.datalake.getModel());
 //		for(int i=0; i<10;i++) 	test.getMov(i*2500);
 //		test.getMov(2500);
 		//test.selectMov();

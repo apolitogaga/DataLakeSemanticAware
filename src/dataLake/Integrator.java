@@ -30,6 +30,7 @@ public class Integrator {
 //		jaccard();
 		System.out.println("IntegrateAll");
 		insertAmazon();
+		//insert
 
 	}
 

@@ -46,8 +46,10 @@ public class SPARQLManager {
 	public static final String ws = " ";
 	public static final String p = ".";
 	public static final String sc = ";";
+	public static int offsetRecommender;
 
 	public SPARQLManager() {
+		offsetRecommender = 0;
 		datalake = new TBDManager();
 		movies = new ArrayList<String>();
 		ACTOR = QueryBuilder.LINKEMDB + CONN + getActorEntity();
@@ -109,8 +111,7 @@ public class SPARQLManager {
 			return datalake.execConstQuery(query);
 	}
 
-	public void initialize()
-	{
+	public void initialize() {
 		this.getMovName();
 		this.getActorMov();
 		this.getActorMov2();
@@ -126,6 +127,7 @@ public class SPARQLManager {
 		this.getDirectorName();
 		this.getActorClass();
 	}
+
 	public void selectMov() {
 		String query = QueryBuilder.buildHeaderQuery()
 				+ QueryBuilder.buildSelect(subject, predicate, object)
@@ -140,6 +142,7 @@ public class SPARQLManager {
 		System.out.println(subjects.size() + " " + predicates.size() + " "
 				+ objects.size());
 	}
+
 	public ArrayList<ArrayList<String>> selectMovNames() {
 		String whereString = subject + a + MOVIEDBP + p + subject + MOVIE_NAME
 				+ object + p;
@@ -159,6 +162,7 @@ public class SPARQLManager {
 		res.remove(1);
 		return res;
 	}
+
 	public void selectActorMov() {
 		String whereString = subject + a + MOVIEDBP + p + subject + ACTOR
 				+ predicate + p;
@@ -172,6 +176,7 @@ public class SPARQLManager {
 		ArrayList<String> predicates = res.get(1);
 		ArrayList<String> objects = res.get(2);
 	}
+
 	public void selectActorFromMov(String mov) {
 		String whereString = mov + ACTOR + subject + p + subject + ACTOR_NAME
 				+ object + p;
@@ -188,6 +193,7 @@ public class SPARQLManager {
 		// System.out.println(subjects.size() + " " + predicates.size() + " " +
 		// objects.size()+ " " + literals.size());
 	}
+
 	public ArrayList<ArrayList<String>> selectMovieFromTitle(String mov) {
 		String whereString = subject + MOVIE_NAME + " '" + mov + "'" + p
 				+ subject + MOVIE_NAME + object;
@@ -201,38 +207,66 @@ public class SPARQLManager {
 		ArrayList<String> predicates = res.get(1);
 		ArrayList<String> objects = res.get(2);
 		ArrayList<String> literals = res.get(3);
-		// System.out.println(subjects.size() + " " + predicates.size() + " " +
-		// objects.size()+ " " + literals.size());
-		// for(int i=0;i<literals.size();i++)
-		// System.out.println(subjects.get(i)+" "+ literals.get(i));// + "  " +
-		// predicates.get(i));
 		res.remove(2);
 		res.remove(1);
 		return res;
 
 	}
+
+	public ArrayList<ArrayList<String>> selectMovieBestRated() {
+		String whereString = subject + a + MOVIEDBP + p + subject + RATING
+				+ predicate+p 
+				+subject+ MOVIE_NAME + object;
+		String query = QueryBuilder.buildHeaderQuery()
+				+ QueryBuilder.buildSelect(subject, predicate, object)
+				+ QueryBuilder.buildWhere(whereString, predicate)
+				+ QueryBuilder.buildOrderBy(predicate)
+				+ "ASC ("+predicate+")"
+				+ QueryBuilder.buildLimit(3)
+				+ QueryBuilder.buildOffset(3*offsetRecommender++);
+//		System.out.println(query);
+		ArrayList<ArrayList<String>> res = datalake.getSelectQuery(query,
+				subject.trim(), predicate.trim(), object.trim());
+		ArrayList<String> subjects = res.get(0);
+		ArrayList<String> predicates = res.get(1);
+		ArrayList<String> objects = res.get(2);
+		ArrayList<String> literals = res.get(3);
+		res.remove(2);
+		return res;
+
+	}
+
 	public void insertMovieRating(String subject, String uri) {
 		insertInstance("<" + subject + ">", RATING,
 				"<http://dbpedia.org/ontology/rating/" + uri + ">");
-	}	
+	}
+
 	public void insertMovieAmazon(String subjectURI) {
-		insertInstance("<http://www.myexample.com/myMovie/"+subjectURI+">", a, MOVIEDBP);
+		insertInstance("<http://www.myexample.com/myMovie/" + subjectURI + ">",
+				a, MOVIEDBP);
 	}
-	public void insertMovieAmazonName(String name,String subjectURI) {
-		insertInstance("<http://www.myexample.com/mySchema/"+subjectURI+">", MOVIE_NAME, "'"+name+"'");
-	}	
+
+	public void insertMovieAmazonName(String name, String subjectURI) {
+		insertInstance(
+				"<http://www.myexample.com/mySchema/" + subjectURI + ">",
+				MOVIE_NAME, "'" + name + "'");
+	}
+
 	public void insertMovieAmazonRating(String subjectURI, String uriRating) {
-		insertMovieRating("http://www.myexample.com/myMovie/"+subjectURI,uriRating);
-	}	
-	public void insertRatingInstance(String uri) {
-		insertInstance("<http://dbpedia.org/ontology/rating/" + uri + ">", a, RATING);
+		insertMovieRating("http://www.myexample.com/myMovie/" + subjectURI,
+				uriRating);
 	}
-	private void insertInstance(String subject, String predicate,
-			String object) {
-		String insertString = createInsertString(subject, predicate,object);
-//		System.out.println(insertString);
+
+	public void insertRatingInstance(String uri) {
+		insertInstance("<http://dbpedia.org/ontology/rating/" + uri + ">", a,
+				RATING);
+	}
+
+	private void insertInstance(String subject, String predicate, String object) {
+		String insertString = createInsertString(subject, predicate, object);
+		// System.out.println(insertString);
 		String sparqlInsertString = createSparqlString(insertString);
-//		System.out.print("\t"+sparqlInsertString);
+		// System.out.print("\t"+sparqlInsertString);
 		datalake.updateTriple(sparqlInsertString);
 	}
 
@@ -247,9 +281,10 @@ public class SPARQLManager {
 
 	public String createSparqlString(String str) {
 		String sparqlString = StrUtils.strjoinNL(QueryBuilder.XSD,
-				QueryBuilder.RDF, QueryBuilder.MYPrefix, QueryBuilder.MOVIE , QueryBuilder.DBPEDIA, QueryBuilder.DC, str);
+				QueryBuilder.RDF, QueryBuilder.MYPrefix, QueryBuilder.MOVIE,
+				QueryBuilder.DBPEDIA, QueryBuilder.DC, str);
 
-//		System.out.println(sparqlString);
+		// System.out.println(sparqlString);
 		return sparqlString;
 	}
 
