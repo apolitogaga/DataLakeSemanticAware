@@ -2,6 +2,8 @@ package dataAmazonType;
 
 import java.util.HashMap;
 
+import utils.TextProcesser;
+
 public class ProcessReviews {
 	private static HashMap<String, Movie> movies;
 	private static HashMap<String, User> reviewers;
@@ -19,6 +21,7 @@ public class ProcessReviews {
 		Movie tempMovie;
 		User tempUser;
 		Rating tempRating;
+//		title = TextProcesser.getStringOfLettersOnly(title);
 		double rating = Double.parseDouble(sRating);
 		if (!reviewers.containsKey(reviewer)) {
 			// Create a new object type user
@@ -53,9 +56,13 @@ public class ProcessReviews {
 			// System.out.println(key);
 			System.out.println(movies.get(key));
 		}
-		// for(String key: this.reviewers.keySet()){
-		// //System.out.println(key);
-		// System.out.println(this.reviewers.get(key));
-		// }
+	}
+
+	public HashMap<String, Movie> getMovies() {
+		return movies;
+	}
+
+	public HashMap<String, User> getReviewers() {
+		return reviewers;
 	}
 }

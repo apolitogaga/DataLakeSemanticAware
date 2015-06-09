@@ -21,7 +21,15 @@ import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.tdb.TDBFactory;
+import com.hp.hpl.jena.update.GraphStore;
+import com.hp.hpl.jena.update.GraphStoreFactory;
+import com.hp.hpl.jena.update.UpdateAction;
+import com.hp.hpl.jena.update.UpdateExecutionFactory;
+import com.hp.hpl.jena.update.UpdateFactory;
+import com.hp.hpl.jena.update.UpdateProcessor;
+import com.hp.hpl.jena.update.UpdateRequest;
 import com.hp.hpl.*;
 
 public class TBDManager {
@@ -30,6 +38,24 @@ public class TBDManager {
 	private String directory = "DataLake";
 	public Model tdb;
 	
+	public void execUpdate(String sparqlUpdateString) {
+        UpdateRequest request = UpdateFactory.create(sparqlUpdateString);
+        UpdateAction.execute(request,tdb);
+       // proc.execute();
+    }
+
+    public void updateTriple(String sparqlUpdateString) {
+    	datalake.begin(ReadWrite.WRITE);
+        try {
+            GraphStore graphStore = GraphStoreFactory.create(datalake);
+            execUpdate(sparqlUpdateString);
+            datalake.commit();
+
+        } finally {
+        	datalake.end();
+        }
+    }
+
 
 	public TBDManager() {
 		this.datalake = TDBFactory.createDataset(directory);
@@ -67,7 +93,8 @@ public class TBDManager {
 	
 	public void queryTBD(){
 		System.out.println("Query this shite");
-		String qs1 = "SELECT * {?s ?p ?o} LIMIT 10" ;
+		String qs1 = " PREFIX dbpedia: <http://dbpedia.org/ontology/> PREFIX movie: <http://data.linkedmdb.org/resource/movie/> PREFIX dc: <http://purl.org/dc/terms/> "
+				+ "SELECT * {?s a dbpedia:Film}" ;
 
 		 try(QueryExecution qExec = QueryExecutionFactory.create(qs1, datalake)) {
 		     ResultSet rs = qExec.execSelect() ;
@@ -84,27 +111,66 @@ public class TBDManager {
 	}
 	public Model execConstQuery(Query query) {return tdb;}///deleeeeteeeeeeee
 
-	public ArrayList<String> selectQuery(Query query) {
-		ArrayList<String> objects = new ArrayList<String>();
-		try (QueryExecution qexec = QueryExecutionFactory.create(query, tdb)) {
-			ResultSet results = qexec.execSelect();
-			for (; results.hasNext();) {
-				QuerySolution soln = results.nextSolution();
-				// System.out.println(soln.toString());
-				// RDFNode x = soln.get("actor"); // Get a result variable by
-				// name.
-				Resource r = soln.getResource("?instance"); // Get a result
-															// variable - must
-															// be a resource
-				// Literal l = soln.getLiteral("?instance"); // Get a result
-				// variable - must be a literal
-
-				objects.add(r.getURI());
-
-				// System.out.println(r.toString());
-			}
+	public ArrayList<ArrayList<String>> getSelectQuery(String query, String subject, 
+			String predicate, String object){
+		ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
+		ArrayList<String> subjects =  new ArrayList<String>();
+		ArrayList<String> predicates =  new ArrayList<String>();
+		ArrayList<String> objects =  new ArrayList<String>();
+		ArrayList<String> literals = new ArrayList<String>();
+		Query qResult = QueryFactory.create(query);
+		Resource rsu = null;
+		Resource rpr = null;
+		Resource rob = null;
+		Literal lit = null;
+		try (QueryExecution qExec = QueryExecutionFactory.create(qResult, tdb)) {
+			ResultSet resSet = qExec.execSelect();			
+			while(resSet.hasNext()){
+				QuerySolution soln = resSet.nextSolution();
+				rsu = soln.getResource(subject);
+				try { rpr = soln.getResource(predicate);} catch(Exception e) {/*ignore*/};
+				try { rob = soln.getResource(object);} catch(Exception e) {/*ignore*/};
+				try { lit = soln.getLiteral(object);} catch(Exception e) {/*ignore*/};
+				try {subjects.add(rsu.getURI());}catch(Exception e) {/*ignore*/};
+				try { predicates.add(rpr.getURI()); } catch(Exception e) {/*ignore*/};
+				try { objects.add(rob.getURI()); } catch(Exception e) {/*ignore*/};
+				try { literals.add(lit.getValue().toString()); } catch(Exception e) {/*ignore*/};
+			}	
 		}
-		return objects;
+		res.add(subjects);
+		res.add(predicates);
+		res.add(objects);
+		res.add(literals);
+		return res;
+	}
+	public void selectQuery(String squery, String subject) {
+		Query qResult = QueryFactory.create(squery);
+		try (QueryExecution qExec = QueryExecutionFactory.create(qResult, tdb)) {
+			ResultSet rs = qExec.execSelect();
+			while(rs.hasNext()){
+				QuerySolution soln = rs.nextSolution();
+				Resource r = soln.getResource("?subject");
+				System.out.println(r.toString());
+			}
+			//return results.getResultVars();
+			
+			//return results.getResourceModel().listStatements().toList();
+//			for (; results.hasNext();) {
+//				QuerySolution soln = results.nextSolution();
+//				
+//				// System.out.println(soln.toString());
+//				// RDFNode x = soln.get("actor"); // Get a result variable by
+//				// name.
+//				Resource r = soln.getResource("?instance"); // Get a result
+//															// variable - must
+//															// be a resource
+//				
+//				// Literal l = soln.getLiteral("?instance"); // Get a result
+//				// variable - must be a literal
+//				objects.add(r.getURI());
+//				// System.out.println(r.toString());
+//			}
+		}
 	}
 
 	private void writeFileDB(Model results, String format) {

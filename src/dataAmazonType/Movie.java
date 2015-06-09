@@ -58,7 +58,7 @@ public class Movie {
 				+ Double.toString(average) + ">>>" + ratingStrings;
 	}
 	
-	private double getAverage() {
+	public double getAverage() {
 		return ratings.stream().mapToDouble(Double::doubleValue).average()
 				.getAsDouble();
 	}

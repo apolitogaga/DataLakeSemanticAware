@@ -1,6 +1,6 @@
 <sources>
 	<source name="linkedmdb" type="rdf">
-		<sparql service="http://linkedmdb.org/sparql"></sparql>
+		<sparql service="http://linkedmdb.org/sparql" uri=""></sparql>
 		<entity name="movie" uri="film" er="true">
 			<entity_name name="title"></entity_name>
 		</entity>
